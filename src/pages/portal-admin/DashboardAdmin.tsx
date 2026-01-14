@@ -36,7 +36,7 @@ export function DashboardAdmin() {
     <SidebarLayout portal="admin" usuario={usuario}>
       <DashboardHeader
         titulo="Dashboard Estratégico"
-        subtitulo="Visão executiva da plataforma FarmaLink"
+        subtitulo="Visão executiva da plataforma NextFarma"
       />
 
       <div className="p-6 space-y-6">

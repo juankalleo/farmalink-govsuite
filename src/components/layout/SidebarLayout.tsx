@@ -88,10 +88,10 @@ export function SidebarLayout({ children, portal, usuario }: SidebarLayoutProps)
         <div className="flex items-center justify-between h-14 px-4 border-b border-sidebar-border">
           {!collapsed && (
             <div className="flex items-center gap-2">
-              <div className="h-8 w-8 rounded-md bg-sidebar-primary flex items-center justify-center">
-                <span className="text-sidebar-primary-foreground font-bold text-sm">FL</span>
+              <div className="h-8 w-8 rounded-md overflow-hidden bg-sidebar-primary flex items-center justify-center">
+                <img src="/iconfarmalink.png" alt="NextFarma" className="h-8 w-8 object-cover" />
               </div>
-              <span className="font-semibold text-sidebar-foreground text-sm">FarmaLink</span>
+              <span className="brand-font text-2xl font-semibold text-sidebar-foreground">NextFarma</span>
             </div>
           )}
           <button

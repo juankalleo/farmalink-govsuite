@@ -73,11 +73,11 @@ export function LoginPage({ portal }: LoginPageProps) {
         <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent" />
         <div className="relative z-10 flex flex-col justify-center px-12 py-16">
           <div className="flex items-center gap-3 mb-8">
-            <div className="h-12 w-12 rounded-lg bg-primary flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-xl">FL</span>
+            <div className="h-12 w-12 rounded-lg bg-primary flex items-center justify-center overflow-hidden">
+              <img src="/iconfarmalink.png" alt="NextFarma" className="h-10 w-10 object-cover" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-sidebar-foreground">FarmaLink</h1>
+              <h1 className="text-2xl font-bold text-sidebar-foreground brand-font">NextFarma</h1>
               <p className="text-sm text-sidebar-foreground/60">Sistema de Gestão Farmacêutica</p>
             </div>
           </div>

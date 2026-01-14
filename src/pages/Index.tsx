@@ -9,11 +9,11 @@ export default function Index() {
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-lg bg-primary flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-lg">FL</span>
+              <div className="h-10 w-10 rounded-lg bg-primary flex items-center justify-center overflow-hidden">
+                <img src="/iconfarmalink.png" alt="NextFarma" className="h-8 w-8 object-cover" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-foreground">FarmaLink</h1>
+                <h1 className="text-xl font-bold text-foreground brand-font">NextFarma</h1>
                 <p className="text-xs text-muted-foreground">Sistema de Gestão Farmacêutica</p>
               </div>
             </div>
@@ -27,8 +27,17 @@ export default function Index() {
       </header>
 
       {/* Hero */}
-      <section className="py-20 bg-gradient-to-b from-sidebar to-background">
-        <div className="container mx-auto px-6">
+      <section className="py-20 relative">
+        {/* background image + gradient overlay */}
+        <div className="absolute inset-0 -z-10">
+          <img
+            src="/farmaciafundo.jpg"
+            alt="NextFarma background"
+            className="absolute inset-0 w-full h-full object-cover"
+            style={{ WebkitMaskImage: 'linear-gradient(to bottom, black 0%, transparent 70%)', maskImage: 'linear-gradient(to bottom, black 0%, transparent 70%)' }}
+          />
+        </div>
+        <div className="container mx-auto px-6 relative z-10">
           <div className="max-w-3xl mx-auto text-center">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6">
               <span className="h-2 w-2 rounded-full bg-primary animate-pulse"></span>
@@ -200,11 +209,11 @@ export default function Index() {
         <div className="container mx-auto px-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-2">
-              <div className="h-8 w-8 rounded-md bg-primary flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-sm">FL</span>
+              <div className="h-8 w-8 rounded-md overflow-hidden bg-primary flex items-center justify-center">
+                <img src="/iconfarmalink.png" alt="NextFarma" className="h-6 w-6 object-cover" />
               </div>
               <span className="text-sm text-muted-foreground">
-                FarmaLink © 2024. Sistema de Gestão Farmacêutica.
+                NextFarma © 2024. Sistema de Gestão Farmacêutica.
               </span>
             </div>
             <div className="flex items-center gap-6 text-sm text-muted-foreground">

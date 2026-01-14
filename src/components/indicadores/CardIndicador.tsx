@@ -64,12 +64,12 @@ export function CardIndicador({
     <div
       className={cn(
         destaque ? 'indicador-card-destaque' : 'indicador-card',
-        'animate-fade-in',
+        'animate-fade-in relative',
         className
       )}
     >
       <div className="flex items-start justify-between">
-        <div className="flex-1">
+        <div className="flex-1 min-w-0 pr-12">
           <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-1">
             {titulo}
           </p>
@@ -77,12 +77,12 @@ export function CardIndicador({
             {formatarValor()}
           </p>
         </div>
-        {icone && (
-          <div className="flex-shrink-0 p-2 rounded-md bg-primary/10 text-primary">
-            {icone}
-          </div>
-        )}
       </div>
+      {icone && (
+        <div className="absolute right-3 top-3 w-8 h-8 p-1.5 rounded-md bg-primary/10 text-primary flex items-center justify-center">
+          {icone}
+        </div>
+      )}
       {variacao !== undefined && (
         <div className="mt-2 pt-2 border-t border-border">
           {renderVariacao()}
