@@ -1,4 +1,3 @@
-import { SidebarLayout } from '@/components/layout/SidebarLayout';
 import { DashboardHeader } from '@/components/layout/DashboardHeader';
 import { CardIndicador } from '@/components/indicadores/CardIndicador';
 import { ContainerGrafico } from '@/components/graficos/ContainerGrafico';
@@ -27,13 +26,8 @@ import {
 } from 'lucide-react';
 
 export function DashboardAdmin() {
-  const usuario = {
-    nome: 'Admin Sistema',
-    email: 'admin@farmalink.gov.br',
-  };
-
   return (
-    <SidebarLayout portal="admin" usuario={usuario}>
+    <>
       <DashboardHeader
         titulo="Dashboard Estratégico"
         subtitulo="Visão executiva da plataforma NextFarma"
@@ -167,6 +161,6 @@ export function DashboardAdmin() {
           />
         </div>
       </div>
-    </SidebarLayout>
+    </>
   );
 }

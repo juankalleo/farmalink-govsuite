@@ -73,7 +73,7 @@ export function CardIndicador({
           <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-1">
             {titulo}
           </p>
-          <p className="text-2xl font-bold text-foreground leading-none">
+          <p className="text-2xl font-bold text-foreground leading-none break-words whitespace-normal">
             {formatarValor()}
           </p>
         </div>

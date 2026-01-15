@@ -24,6 +24,14 @@ import DesempenhoFornecedor from "./pages/portal-fornecedor/Desempenho";
 import RelatoriosFornecedor from "./pages/portal-fornecedor/Relatorios";
 import ConfiguracoesFornecedor from "./pages/portal-fornecedor/Configuracoes";
 import { DashboardAdmin } from "./pages/portal-admin/DashboardAdmin";
+import AdminLayout from "./pages/portal-admin/AdminLayout";
+import Orgaos from "./pages/portal-admin/Orgaos";
+import FornecedoresAdmin from "./pages/portal-admin/Fornecedores";
+import UsuariosAdmin from "./pages/portal-admin/Usuarios";
+import FinanceiroAdmin from "./pages/portal-admin/Financeiro";
+import SegurancaAdmin from "./pages/portal-admin/Seguranca";
+import ConfiguracoesAdmin from "./pages/portal-admin/Configuracoes";
+import RelatoriosAdmin from "./pages/portal-admin/Relatorios";
 
 const queryClient = new QueryClient();
 
@@ -67,8 +75,16 @@ const App = () => (
           </Route>
 
           {/* Portal do Administrador */}
-          <Route path="/portal-admin" element={<DashboardAdmin />} />
-          <Route path="/portal-admin/*" element={<DashboardAdmin />} />
+          <Route path="/portal-admin/*" element={<AdminLayout />}>
+            <Route index element={<DashboardAdmin />} />
+            <Route path="orgaos" element={<Orgaos />} />
+            <Route path="fornecedores" element={<FornecedoresAdmin />} />
+            <Route path="usuarios" element={<UsuariosAdmin />} />
+            <Route path="relatorios" element={<RelatoriosAdmin />} />
+            <Route path="financeiro" element={<FinanceiroAdmin />} />
+            <Route path="seguranca" element={<SegurancaAdmin />} />
+            <Route path="configuracoes" element={<ConfiguracoesAdmin />} />
+          </Route>
 
           {/* Rota 404 */}
           <Route path="*" element={<NotFound />} />
