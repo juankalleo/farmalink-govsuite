@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TipoPortal } from '@/types';
 import { Building2, Package, Shield, Eye, EyeOff } from 'lucide-react';
@@ -39,6 +39,10 @@ const configPortal: Record<TipoPortal, {
 };
 
 export function LoginPage({ portal }: LoginPageProps) {
+  useEffect(() => {
+    document.body.classList.add('login-bg-dark');
+    return () => { document.body.classList.remove('login-bg-dark'); };
+  }, []);
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
@@ -67,10 +71,18 @@ export function LoginPage({ portal }: LoginPageProps) {
   };
 
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-screen flex relative overflow-hidden">
+      {/* Split background and animated bubbles */}
+      <div className="split-bg z-0">
+        <div className="split-left" />
+
+        <div className="bg-bubble bubble-1" style={{ zIndex: 0 }} />
+        <div className="bg-bubble bubble-2" style={{ zIndex: 0 }} />
+        <div className="bg-bubble bubble-3" style={{ zIndex: 0 }} />
+        <div className="bg-bubble bubble-4" style={{ zIndex: 0 }} />
+      </div>
       {/* Lado esquerdo - Branding */}
-      <div className="hidden lg:flex lg:w-1/2 bg-sidebar relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent" />
+      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden z-10">
         <div className="relative z-10 flex flex-col justify-center px-12 py-16">
           <div className="flex items-center gap-3 mb-8">
             <div className="h-12 w-12 rounded-lg bg-primary flex items-center justify-center overflow-hidden">
@@ -108,25 +120,21 @@ export function LoginPage({ portal }: LoginPageProps) {
           </div>
         </div>
 
-        {/* Decoração */}
-        <div className="absolute bottom-0 right-0 w-64 h-64 bg-primary/10 rounded-full -translate-x-1/2 translate-y-1/2" />
-        <div className="absolute top-20 right-20 w-32 h-32 bg-primary/5 rounded-full" />
+        {/* (Removed per-column decorations so the global `split-bg` covers whole viewport) */}
       </div>
 
-      {/* Lado direito - Formulário */}
-      <div className="flex-1 flex items-center justify-center p-8 bg-background">
+      {/* Lado direito - Formulário (card liquidglass) */}
+      <div className="flex-1 flex items-center justify-center p-8 relative z-10">
         <div className="w-full max-w-md">
-          {/* Header do Portal */}
-          <div className="text-center mb-8">
-            <div className={cn('inline-flex p-4 rounded-xl mb-4', config.corIcone)}>
-              <Icone className="h-8 w-8" />
+          <div className="glass-card p-8 brand-font relative z-20 text-white">
+            {/* Header do Portal */}
+            <div className="text-center mb-6">
+              <h2 className="text-2xl font-bold text-white brand-font">{config.titulo}</h2>
+              <p className="text-white/80 mt-1 text-sm">{config.subtitulo}</p>
             </div>
-            <h2 className="text-2xl font-bold text-foreground">{config.titulo}</h2>
-            <p className="text-muted-foreground mt-1">{config.subtitulo}</p>
-          </div>
 
-          {/* Formulário */}
-          <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Formulário */}
+            <form onSubmit={handleSubmit} className="space-y-4 text-base">
             {erro && (
               <div className="p-3 rounded-md bg-destructive/10 border border-destructive/20 text-destructive text-sm">
                 {erro}
@@ -134,7 +142,7 @@ export function LoginPage({ portal }: LoginPageProps) {
             )}
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-foreground mb-1.5">
+              <label htmlFor="email" className="block text-sm font-medium text-white mb-1.5">
                 E-mail
               </label>
               <input
@@ -142,13 +150,13 @@ export function LoginPage({ portal }: LoginPageProps) {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-2.5 bg-secondary border border-border rounded-md text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent"
+                className="w-full px-4 py-2.5 bg-secondary border border-border rounded-md text-black placeholder:text-black/60 focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent"
                 placeholder="seu@email.gov.br"
               />
             </div>
 
             <div>
-              <label htmlFor="senha" className="block text-sm font-medium text-foreground mb-1.5">
+              <label htmlFor="senha" className="block text-sm font-medium text-white mb-1.5">
                 Senha
               </label>
               <div className="relative">
@@ -157,13 +165,13 @@ export function LoginPage({ portal }: LoginPageProps) {
                   type={mostrarSenha ? 'text' : 'password'}
                   value={senha}
                   onChange={(e) => setSenha(e.target.value)}
-                  className="w-full px-4 py-2.5 pr-10 bg-secondary border border-border rounded-md text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent"
+                  className="w-full px-4 py-2.5 pr-10 bg-secondary border border-border rounded-md text-black placeholder:text-black/60 focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent"
                   placeholder="••••••••"
                 />
                 <button
                   type="button"
                   onClick={() => setMostrarSenha(!mostrarSenha)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-white/60 hover:text-white"
                 >
                   {mostrarSenha ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
@@ -176,7 +184,7 @@ export function LoginPage({ portal }: LoginPageProps) {
                   type="checkbox"
                   className="h-4 w-4 rounded border-border text-primary focus:ring-primary"
                 />
-                <span className="text-sm text-muted-foreground">Lembrar de mim</span>
+                <span className="text-sm text-white/80">Lembrar de mim</span>
               </label>
               <a href="#" className="text-sm text-primary hover:underline">
                 Esqueci minha senha
@@ -190,41 +198,28 @@ export function LoginPage({ portal }: LoginPageProps) {
             >
               {carregando ? 'Entrando...' : 'Entrar'}
             </button>
-          </form>
+            </form>
 
-          {/* Links de outros portais */}
-          <div className="mt-8 pt-6 border-t border-border">
-            <p className="text-sm text-muted-foreground text-center mb-3">
-              Acessar outro portal:
-            </p>
-            <div className="flex justify-center gap-4">
-              {portal !== 'prefeitura' && (
-                <a
-                  href="/login/prefeitura"
-                  className="text-sm text-primary hover:underline flex items-center gap-1"
-                >
-                  <Building2 className="h-4 w-4" />
-                  Órgão Público
-                </a>
-              )}
-              {portal !== 'fornecedor' && (
-                <a
-                  href="/login/fornecedor"
-                  className="text-sm text-primary hover:underline flex items-center gap-1"
-                >
-                  <Package className="h-4 w-4" />
-                  Fornecedor
-                </a>
-              )}
-              {portal !== 'admin' && (
-                <a
-                  href="/login/admin"
-                  className="text-sm text-primary hover:underline flex items-center gap-1"
-                >
-                  <Shield className="h-4 w-4" />
-                  Administrador
-                </a>
-              )}
+            {/* Links de outros portais dentro do card */}
+            <div className="mt-6 pt-4 border-t border-border">
+              <p className="text-sm text-white/80 text-center mb-3">Acessar outro portal:</p>
+              <div className="flex justify-center gap-4">
+                {portal !== 'prefeitura' && (
+                  <a href="/login/prefeitura" className="text-sm text-primary hover:underline">
+                    Órgão Público
+                  </a>
+                )}
+                {portal !== 'fornecedor' && (
+                  <a href="/login/fornecedor" className="text-sm text-primary hover:underline">
+                    Fornecedor
+                  </a>
+                )}
+                {portal !== 'admin' && (
+                  <a href="/login/admin" className="text-sm text-primary hover:underline">
+                    Administrador
+                  </a>
+                )}
+              </div>
             </div>
           </div>
         </div>

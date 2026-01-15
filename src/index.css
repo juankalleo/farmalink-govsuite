@@ -138,6 +138,12 @@
     font-family: 'Inter', system-ui, sans-serif;
   }
 
+  /* Page-specific dark background for login (applied via body.login-bg-dark) */
+  body.login-bg-dark {
+    background: linear-gradient(120deg, #071028 0%, #12243a 40%, #f1e5ea 100% ) !important;
+    color: rgba(255,255,255,0.95);
+  }
+
   /* Brand font: Brilliant Cut
      To use the actual 'Brilliant Cut' font, add the font files to `public/fonts/`
      and uncomment the @font-face block below, or provide a CDN URL.
@@ -207,6 +213,42 @@
   .tabela-institucional td {
     @apply px-3 py-2 border-b border-border;
   }
+
+  /* Glassmorphism card used by login */
+  .glass-card {
+    background: rgba(255,255,255,0.04);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 10px 30px rgba(2,6,23,0.45);
+    border-radius: 0.75rem;
+  }
+
+  /* Split background (left/right) used on login page */
+  /* Use fixed so it always covers the viewport (not clipped by parent overflow) */
+  .split-bg { position: fixed; inset: 0; display:flex; pointer-events: none; z-index: 0; }
+  /* Make the left gradient cover the full background (behind the login card) */
+  /* Darker split background (matches previous darker left-side style) */
+  .split-left { position: absolute; inset: 0; width:100%; height:100%; background: linear-gradient(120deg, rgba(6,10,25,0.92) 0%, rgba(59,130,246,0.12) 35%, rgba(236,72,153,0.06) 70%); }
+  .split-right { display: none; }
+
+  /* Animated decorative bubbles */
+  .bg-bubble { position: absolute; border-radius: 9999px; opacity: 0.45; filter: blur(12px); transform: translateZ(0); mix-blend-mode: screen; pointer-events: none; }
+
+  @keyframes floatBubble {
+    0% { transform: translateY(0) translateX(0) scale(1); }
+    50% { transform: translateY(-28px) translateX(12px) scale(1.04); }
+    100% { transform: translateY(0) translateX(0) scale(1); }
+  }
+
+  .bubble-1 { background: rgba(99,102,241,0.55); width: 360px; height: 360px; left: 0%; top: 2%; animation: floatBubble 10s ease-in-out infinite; }
+  .bubble-2 { background: rgba(59,130,246,0.48); width: 220px; height: 220px; left: 20%; top: 50%; animation: floatBubble 12s ease-in-out infinite; animation-delay: 2s; }
+  .bubble-3 { background: rgba(236,72,153,0.50); width: 340px; height: 340px; right: 2%; top: 10%; animation: floatBubble 11s ease-in-out infinite; animation-delay: 1s; }
+  .bubble-4 { background: rgba(16,185,129,0.46); width: 200px; height: 200px; right: 16%; top: 60%; animation: floatBubble 14s ease-in-out infinite; animation-delay: 3s; }
+
+  /* Add a large subtle background halo to increase perception across both sides */
+  .bubble-5 { background: rgba(236,72,153,0.10); width: 640px; height: 640px; left: -10%; bottom: -20%; position: absolute; border-radius: 50%; opacity: 0.12; filter: blur(60px); mix-blend-mode: overlay; }
+
 
   .tabela-institucional tr:hover {
     @apply bg-muted/50;
