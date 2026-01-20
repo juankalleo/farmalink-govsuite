@@ -1,14 +1,13 @@
 import { useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { DashboardHeader } from '@/components/layout/DashboardHeader';
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { cotacoesMock, rankingMedicamentos } from '@/lib/mock-dados';
 import { Cotacao } from '@/types';
 import { formatarMoeda } from '@/lib/formatadores';
-import { Eye, Send, Paperclip, X } from 'lucide-react';
+import { Eye, Send } from 'lucide-react';
 
 export default function CotacoesFornecedor() {
   const [query, setQuery] = useState('');
@@ -19,11 +18,7 @@ export default function CotacoesFornecedor() {
   const [valorMin, setValorMin] = useState('');
   const [valorMax, setValorMax] = useState('');
   const [selected, setSelected] = useState<Cotacao | null>(null);
-  const [propostaOpen, setPropostaOpen] = useState(false);
-  const [valor, setValor] = useState('');
-  const [prazo, setPrazo] = useState('');
-  const [mensagem, setMensagem] = useState('');
-  const [attachments, setAttachments] = useState<Array<{ name: string; type: string; size: number; dataUrl: string }>>([]);
+  const navigate = useNavigate();
 
   // fornecedores see only published or em_analise
   const disponiveis = useMemo(() => cotacoesMock.filter(c => ['publicada','em_analise'].includes(c.status)), []);
@@ -61,44 +56,10 @@ export default function CotacoesFornecedor() {
   }
 
   function openProposta(c: Cotacao) {
-    setSelected(c); setPropostaOpen(true); setValor(''); setPrazo(''); setMensagem('');
-    setAttachments([]);
+    navigate(`/portal-fornecedor/propor/${c.id}`);
   }
 
-  function enviarProposta() {
-    if (!selected) return;
-    const propostasKey = 'minhas_propostas';
-    const existing = JSON.parse(localStorage.getItem(propostasKey) || '[]');
-    const proposal = {
-      id: `PR-${Date.now()}`,
-      cotacaoId: selected.id,
-      cotacaoNumero: selected.numero,
-      cotacaoTitulo: selected.titulo,
-      orgaoNome: selected.orgaoNome,
-      valorProposto: valor,
-      prazoDias: prazo,
-      mensagem,
-      dataEnvio: new Date().toISOString(),
-      status: 'enviada',
-      cotacaoSnapshot: {
-        id: selected.id,
-        numero: selected.numero,
-        titulo: selected.titulo,
-        orgaoNome: selected.orgaoNome,
-        quantidadeItens: selected.quantidadeItens,
-        valorEstimado: selected.valorEstimado,
-        dataLimite: selected.dataLimite,
-      }
-    ,
-      attachments
-    };
-    existing.unshift(proposal);
-    localStorage.setItem(propostasKey, JSON.stringify(existing));
-    // reflect locally
-    setSelected((prev) => prev ? { ...prev, propostas: (prev.propostas || 0) + 1 } : prev);
-    alert('Proposta enviada com sucesso.');
-    setPropostaOpen(false);
-  }
+  
 
   function generateItems(c?: Cotacao) {
     if (!c) return [];
@@ -119,22 +80,6 @@ export default function CotacoesFornecedor() {
         observacao: 'Conforme especificação técnica do edital',
       };
     });
-  }
-
-  function handleFiles(files?: FileList | null) {
-    if (!files) return;
-    const arr = Array.from(files);
-    const readers = arr.map(f => new Promise<{ name:string; type:string; size:number; dataUrl:string }>((res, rej) => {
-      const r = new FileReader();
-      r.onload = () => res({ name: f.name, type: f.type, size: f.size, dataUrl: String(r.result) });
-      r.onerror = rej;
-      r.readAsDataURL(f);
-    }));
-    Promise.all(readers).then(results => setAttachments(prev => [...prev, ...results]));
-  }
-
-  function removeAttachment(idx: number) {
-    setAttachments(prev => prev.filter((_, i) => i !== idx));
   }
 
   function gerarEditalHtml(c: Cotacao, items: any[]) {
@@ -277,49 +222,7 @@ export default function CotacoesFornecedor() {
         </div>
       )}
 
-      <Dialog open={propostaOpen} onOpenChange={(v) => setPropostaOpen(v)}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Enviar Proposta</DialogTitle>
-            <DialogDescription>Envie sua proposta para a cotação {selected?.numero}</DialogDescription>
-          </DialogHeader>
-
-          <div className="grid gap-2 mt-4">
-            <label className="text-sm">Valor Proposto</label>
-            <Input value={valor} onChange={(e) => setValor(e.target.value)} placeholder="0,00" />
-            <label className="text-sm">Prazo de Entrega (dias)</label>
-            <Input value={prazo} onChange={(e) => setPrazo(e.target.value)} placeholder="Ex: 7" />
-            <label className="text-sm">Mensagem</label>
-            <Textarea value={mensagem} onChange={(e) => setMensagem(e.target.value)} placeholder="Observações sobre a proposta" />
-            <label className="text-sm">Anexos (contratos, termos, planilhas)</label>
-            <div className="flex items-center gap-2">
-              <input type="file" multiple onChange={(e) => handleFiles(e.target.files)} />
-              <div className="text-sm text-muted-foreground flex items-center gap-2"><Paperclip /> <span>{attachments.length} anexos</span></div>
-            </div>
-            {attachments.length > 0 && (
-              <div className="mt-2 space-y-1">
-                {attachments.map((a, i) => (
-                  <div key={i} className="flex items-center justify-between gap-2 bg-secondary p-2 rounded">
-                    <div className="truncate">
-                      <strong className="mr-2">{a.name}</strong>
-                      <span className="text-xs text-muted-foreground">{Math.round(a.size/1024)} KB</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <a href={a.dataUrl} download={a.name} className="text-sm text-primary">Download</a>
-                      <button className="p-1" onClick={() => removeAttachment(i)} title="Remover anexo"><X className="w-4 h-4" /></button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-
-          <DialogFooter>
-            <Button variant="secondary" size="sm" onClick={() => setPropostaOpen(false)}>Cancelar</Button>
-            <Button size="sm" onClick={enviarProposta}>Enviar</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      {/* Proposta agora aberta em rota separada */}
     </div>
   );
 }

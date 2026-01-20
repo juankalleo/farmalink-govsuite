@@ -1,3 +1,4 @@
+import React, { lazy, Suspense } from 'react';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -33,6 +34,10 @@ import SegurancaAdmin from "./pages/portal-admin/Seguranca";
 import ConfiguracoesAdmin from "./pages/portal-admin/Configuracoes";
 import RelatoriosAdmin from "./pages/portal-admin/Relatorios";
 
+const FornecedoresPrecosPref = lazy(() => import('./pages/portal-prefeitura/FornecedoresPrecos'));
+const FornecedoresPrecosFor = lazy(() => import('./pages/portal-fornecedor/FornecedoresPrecos'));
+const ProporCotacao = lazy(() => import('./pages/portal-fornecedor/ProporCotacao'));
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -55,6 +60,7 @@ const App = () => (
             <Route index element={<PrefeituraHome />} />
             <Route path="cotacoes" element={<Cotacoes />} />
             <Route path="centros-custo" element={<CentrosCusto />} />
+            <Route path="fornecedores/precos" element={<Suspense fallback={<div>Carregando...</div>}><FornecedoresPrecosPref /></Suspense>} />
             <Route path="fornecedores" element={<Fornecedores />} />
             <Route path="financeiro" element={<Financeiro />} />
             <Route path="relatorios" element={<Relatorios />} />
@@ -66,8 +72,10 @@ const App = () => (
           <Route path="/portal-fornecedor/*" element={<DashboardFornecedor />}>
             <Route index element={<FornecedorHome />} />
             <Route path="cotacoes" element={<CotacoesFornecedor />} />
+            <Route path="fornecedores/precos" element={<Suspense fallback={<div>Carregando...</div>}><FornecedoresPrecosFor /></Suspense>} />
             <Route path="fornecedores" element={<Fornecedores />} />
             <Route path="propostas" element={<PropostasFornecedor />} />
+            <Route path="propor/:cotacaoId" element={<Suspense fallback={<div>Carregando...</div>}><ProporCotacao /></Suspense>} />
             <Route path="relatorios" element={<RelatoriosFornecedor />} />
             <Route path="configuracoes" element={<ConfiguracoesFornecedor />} />
             <Route path="desempenho" element={<DesempenhoFornecedor />} />
